@@ -1,9 +1,10 @@
 name: CI for ASW2122
 
 on:
+  push:
+    branches: [ master ]
   release:
     types: [published]
-
 jobs:
   unit-test-webapp:
     runs-on: ubuntu-latest
