@@ -1,4 +1,4 @@
-import { login, handleIncomingRedirect, getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 
 function Carrito(): JSX.Element {
 

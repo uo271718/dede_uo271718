@@ -14,7 +14,7 @@ export type Producto = {
 }
 
 export type Pedido = {
-  id: string;
+  webid: string;
   idProducto: number;
   nombreProducto: string,
   cantidad: number,

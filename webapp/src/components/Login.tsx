@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, InputLabel, Select, MenuItem, Stack, SelectChangeEvent } from '@mui/material';
+import { Box, Button, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { login, handleIncomingRedirect, getDefaultSession } from "@inrupt/solid-client-authn-browser";
 import {
     getSolidDataset,

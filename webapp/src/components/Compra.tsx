@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Producto, Almacen } from '../shared/shareddtypes';
-import { Box, Button, InputLabel, Select, MenuItem, Stack, SelectChangeEvent, TextField } from '@mui/material';
-import { login, handleIncomingRedirect, getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { Box, Button, InputLabel, Select, MenuItem, SelectChangeEvent, TextField } from '@mui/material';
+import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
+import { getProducto, getAlmacenes, addPedido } from '../api/api';
 
 function Compra(props: any): JSX.Element {
 
@@ -12,74 +13,58 @@ function Compra(props: any): JSX.Element {
 
   const { id } = useParams<string>();
 
-  const prueba = [{
-    "idProducto": 1,
-    "almacen": "Asturias",
-    "cantidad": 100,
-    "zona": "norte",
-  },
-  {
-    "idProducto": 1,
-    "almacen": "Madrid",
-    "cantidad": 500,
-    "zona": "centro",
-  }];
-
   const [producto, setProducto] = useState<Producto>({} as any);
-  const [almacenes, setAlmacenes] = useState<Almacen[]>({} as any);
+  const [almacenes, setAlmacenes] = useState<Almacen[]>([]);
   const [almacen, setAlmacen] = useState("");
   const [zona, setZona] = useState("");
   const [coste, setCoste] = useState(0);
   const [cantidad, setCantidad] = useState(1);
   const [gastosEnvio, setGastosEnvio] = useState(0);
 
-  let MapaDePrecios = [[0, 2, 5], [5, 8, 15], [20, 25, 30]];
-  let categoriaPeso: number = 0;
-  let categoriaDistancia = 0;
+  const MapaDePrecios = [[0, 2, 5], [5, 8, 15], [20, 25, 30]];
 
   const seleccionarAlmacen = (e: SelectChangeEvent) => {
     let value = e.target.value as string;
     setAlmacen(value.split('-')[0]);
     setZona(value.split('-')[1]);
-    categoriaDistancia = calcularCatDistancia();
-    setGastosEnvio(MapaDePrecios[categoriaDistancia][categoriaPeso]);
-    console.log(gastosEnvio)
+    setGastosEnvio(MapaDePrecios[categoriaDistancia(value.split('-')[1])][categoriaPeso()]);
   };
 
-  const calcularCatDistancia = () => {
-    return 1;
+  const categoriaDistancia = (zonaAlmacen: string) => {
+    let zonaUsuario = "norte";
+    if (zonaAlmacen === zonaUsuario){
+      return 0;
+    } else if (zonaAlmacen === "canarias" || zonaAlmacen === "baleares" || zonaUsuario === "canarias" || zonaUsuario === "baleares"){
+      return 2;
+    } else {
+      return 1;
+    }
   }
 
-  const cambiarCantidad = (e:any) => {
+  const categoriaPeso = () => {
+    return producto.peso < 5 ? 0 : producto.peso < 20 ? 1 : 2;
+  }
+
+  const cambiarCantidad = (e: any) => {
     setCantidad(e.target.value as unknown as number);
     setCoste(e.target.value as unknown as number * producto.precio);
   }
 
-  const getProduct = (idProducto: string) => {
-    setProducto({
-      "id": 1,
-      "nombre": "Playstation 5",
-      "precio": 400.0,
-      "peso": 5.0,
-      "descripcion": "Consola de sobremesa para jugar a videojuegos de la marca Sony"
-    });
+  const getProduct = async (idProducto: string) => {
+    setProducto(await getProducto(idProducto));
   }
-  const getAlmacenes = (idProducto: string) => setAlmacenes([{
-    "idProducto": 1,
-    "almacen": "Asturias",
-    "cantidad": 100,
-    "zona": "norte",
-  },
-  {
-    "idProducto": 1,
-    "almacen": "Madrid",
-    "cantidad": 500,
-    "zona": "centro",
-  }]);
+  const inicializarAlmacenes = async (idProducto: string) => {
+    console.log(idProducto);
+    setAlmacenes(await getAlmacenes(idProducto));
+  }
+
+  const realizarCompra = async () => {
+    addPedido({webid:getDefaultSession().info.webId, idProducto:producto.id, nombreProducto:producto.nombre, cantidad:cantidad, precio:coste, almacen:almacen, envio:gastosEnvio, estado:'En reparto' })
+  }
+
   useEffect(() => {
+    inicializarAlmacenes(id!);
     getProduct(id!);
-    getAlmacenes(id!);
-    categoriaPeso = producto.peso < 5 ? 0 : producto.peso < 20 ? 1 : 2;
     setCoste(producto.precio);
   }, []);
 
@@ -91,13 +76,13 @@ function Compra(props: any): JSX.Element {
         <Box sx={{ border: 'solid 2px #f0c482', padding: '1em', margin: '1em', borderRadius: '1em' }}>
           <h3>Confirmar datos de envío</h3>
           <InputLabel>Calle</InputLabel>
-          <TextField disabled value={props.direccion.calle}/>
+          <TextField disabled value={props.direccion.calle} />
           <InputLabel>Ciudad</InputLabel>
-          <TextField disabled value={props.direccion.ciudad}/>
+          <TextField disabled value={props.direccion.ciudad} />
           <InputLabel>Región</InputLabel>
-          <TextField disabled value={props.direccion.region}/>
+          <TextField disabled value={props.direccion.region} />
           <InputLabel>CP</InputLabel>
-          <TextField disabled value={props.direccion.cp}/>
+          <TextField disabled value={props.direccion.cp} />
         </Box>
         <Box sx={{ border: 'solid 2px #f0c482', padding: '1em', margin: '1em', borderRadius: '1em' }}>
           <h3>{producto.nombre}</h3>
@@ -105,12 +90,10 @@ function Compra(props: any): JSX.Element {
           <h4>Peso: {producto.peso}kg</h4>
           <InputLabel>Unidades</InputLabel>
           <TextField
-          type='number'
-          defaultValue={1}
-          inputProps={{min:1}}
+            type='number'
+            inputProps={{ min: 1 }}
             onChange={cambiarCantidad}
             sx={{ width: '15em' }}
-            placeholder='1'
           />
           <InputLabel>Enviado desde</InputLabel>
           <Select
@@ -118,26 +101,33 @@ function Compra(props: any): JSX.Element {
             onChange={seleccionarAlmacen}
             sx={{ width: '15em' }}
           >
-            {prueba.map((a: Almacen) => <MenuItem value={a.almacen + '-' + a.zona}>
-              {a.almacen + ' - ' + a.cantidad + ' disponibles'}
-            </MenuItem>)}
+            {
+              almacenes.length > 0 ? (almacenes.map((a: Almacen) => <MenuItem value={a.almacen + '-' + a.zona}>
+                {a.almacen + ' - ' + a.cantidad + ' disponibles'}
+              </MenuItem>)
+              ) : (
+                <MenuItem value={'-'}>Sin stock
+                </MenuItem>)
+            }
           </Select>
         </Box>
 
-        <Box sx={{ border: 'solid 2px #f0c482', padding: '1em', margin: '1em', borderRadius: '1em', display:'flex', flexDirection:'column' }}>
+        <Box sx={{ border: 'solid 2px #f0c482', padding: '1em', margin: '1em', borderRadius: '1em', display: 'flex', flexDirection: 'column' }}>
           <h3>Resumen de costes</h3>
           <InputLabel>Coste</InputLabel>
-          <TextField disabled value={coste}/>
+          <TextField disabled value={coste} />
           <InputLabel>Gastos de envío</InputLabel>
-          <TextField disabled value={gastosEnvio}/>
+          <TextField disabled value={gastosEnvio} />
           <InputLabel>Total</InputLabel>
-          <TextField disabled  value={coste + gastosEnvio}/>
+          <TextField disabled value={coste + gastosEnvio} />
+          <Link to='/pedidos'>
           <Button sx={{
             bgcolor: '#e7a541',
             color: '#fff',
             marginTop: 'auto'
           }}
-          disabled={almacen==='' || cantidad < 1}>Comprar</Button>
+            onClick={realizarCompra}
+            disabled={almacen === '' || cantidad < 1}>Comprar</Button></Link>
         </Box>
       </Box>
     </main>

@@ -77,6 +77,6 @@ a[href^='/producto/']{
   color: black;
 }
 
-a[href^='/comprar/'] {
+a {
   text-decoration: none;
 }

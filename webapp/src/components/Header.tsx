@@ -6,7 +6,6 @@ function Header(props : any): JSX.Element {
 
     let nombre: string;
     nombre = "UO271718";
-    console.log(props.s);
     return (
       <header>
         <h1><img src={logo} className="App-logo" alt="logo" width="60px" />DeDe</h1>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Pedidos from './components/Pedidos';
@@ -10,7 +10,6 @@ import Login from './components/Login';
 import Logout from './components/Logout';
 import './App.css';
 import DetalleProducto from './components/DetalleProducto';
-import { Session } from '@inrupt/solid-client-authn-browser';
 import { Direccion } from './shared/shareddtypes';
 
 function App(): JSX.Element {

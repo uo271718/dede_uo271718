@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Pedido } from '../shared/shareddtypes';
 import { Table, TableContainer, TableBody, TableHead, TableRow, TableCell, Paper } from '@mui/material';
 import { getDefaultSession } from '@inrupt/solid-client-authn-browser';
+import { getPedidos } from '../api/api';
 
 function Pedidos(): JSX.Element {
 
@@ -11,27 +12,12 @@ function Pedidos(): JSX.Element {
 
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
 
+  const inicializarPedidos = async () => {
+    setPedidos(await getPedidos(getDefaultSession().info.webId))
+  }
+
   useEffect( () => {
-    setPedidos([{
-      "id": "fffff",
-      "idProducto" : 1,
-      "nombreProducto": "PlayStation 5",
-      "cantidad":1,
-      "precio": 400.0,
-      "almacen": "Asturias",
-      "envio": 5,
-      "estado": "Recibido"
-    },
-    {
-      "id": "fdddd",
-      "idProducto" : 2,
-      "nombreProducto": "XBOX",
-      "cantidad":2,
-      "precio": 800.0,
-      "almacen": "Asturias",
-      "envio": 5,
-      "estado": "Enviado"
-    }])
+    inicializarPedidos();
   }, []);
   return (
     <main>

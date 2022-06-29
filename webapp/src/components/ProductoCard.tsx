@@ -1,6 +1,5 @@
 import { Producto } from '../shared/shareddtypes';
-import { Box, Button, TextField, Typography } from '@mui/material';
-import { borderRadius } from '@mui/system';
+import { Box, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 type ProductoProps = {
