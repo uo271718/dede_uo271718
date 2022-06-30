@@ -16,7 +16,7 @@ function Login(props: any): JSX.Element {
 
     useEffect(() => {
         loginAndFetch()
-    }, []);
+    }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
     const seleccionarProveedor = (e: SelectChangeEvent) => {
         setProveedor(e.target.value as string);
@@ -48,7 +48,7 @@ function Login(props: any): JSX.Element {
         let ciudad = getStringNoLocale(await getProfile(address), VCARD.locality) as string;
         let region = getStringNoLocale(await getProfile(address), VCARD.region) as string;
         let cp = getStringNoLocale(await getProfile(address), VCARD.postal_code) as string;
-        let direccion : Direccion = {calle, ciudad, region, cp};
+        let direccion: Direccion = { calle, ciudad, region, cp };
         return direccion;
     }
 

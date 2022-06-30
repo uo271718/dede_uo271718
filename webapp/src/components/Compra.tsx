@@ -32,9 +32,9 @@ function Compra(props: any): JSX.Element {
 
   const categoriaDistancia = (zonaAlmacen: string) => {
     let zonaUsuario = "norte";
-    if (zonaAlmacen === zonaUsuario){
+    if (zonaAlmacen === zonaUsuario) {
       return 0;
-    } else if (zonaAlmacen === "canarias" || zonaAlmacen === "baleares" || zonaUsuario === "canarias" || zonaUsuario === "baleares"){
+    } else if (zonaAlmacen === "canarias" || zonaAlmacen === "baleares" || zonaUsuario === "canarias" || zonaUsuario === "baleares") {
       return 2;
     } else {
       return 1;
@@ -59,13 +59,13 @@ function Compra(props: any): JSX.Element {
   }
 
   const realizarCompra = async () => {
-    addPedido({webid:getDefaultSession().info.webId, idProducto:producto.id, nombreProducto:producto.nombre, cantidad:cantidad, precio:coste, almacen:almacen, envio:gastosEnvio, estado:'En reparto' })
+    addPedido({ webid: getDefaultSession().info.webId, idProducto: producto.id, nombreProducto: producto.nombre, cantidad: cantidad, precio: coste, almacen: almacen, envio: gastosEnvio, estado: 'En reparto' })
   }
 
   useEffect(() => {
     inicializarAlmacenes(id!);
     getProduct(id!);
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   return (
@@ -120,13 +120,13 @@ function Compra(props: any): JSX.Element {
           <InputLabel>Total</InputLabel>
           <TextField disabled value={coste + gastosEnvio} />
           <Link to='/pedidos'>
-          <Button sx={{
-            bgcolor: '#e7a541',
-            color: '#fff',
-            marginTop: 'auto'
-          }}
-            onClick={realizarCompra}
-            disabled={almacen === '' || cantidad < 1}>Comprar</Button></Link>
+            <Button sx={{
+              bgcolor: '#e7a541',
+              color: '#fff',
+              marginTop: 'auto'
+            }}
+              onClick={realizarCompra}
+              disabled={almacen === '' || cantidad < 1}>Comprar</Button></Link>
         </Box>
       </Box>
     </main>

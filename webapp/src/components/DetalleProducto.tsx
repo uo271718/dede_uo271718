@@ -16,13 +16,12 @@ function DetalleProducto(): JSX.Element {
 
   useEffect(() => {
     getProduct(id!);
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
-
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <main>
       <h2>{producto.nombre}</h2>
-      <img src={"/productos/" + id + ".png"} alt='logo' width='500'/>
+      <img src={"/productos/" + id + ".png"} alt='logo' width='500' />
       <h3>Precio: {producto.precio}€</h3>
       <h3>Peso: {producto.peso}g</h3>
       <p>{producto.descripcion}</p>

@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 
-function Logout( props : any): JSX.Element {
+function Logout(props: any): JSX.Element {
+
+    const cerrarSesion = () => {
+        props.nombre('');
+        document.location.href = "/";
+    };
 
     useEffect(() => {
-        const cerrarSesion = () => {
-            props.nombre('');
-            document.location.href = "/";
-        };
         cerrarSesion();
-      }, []);
+    }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <></>
