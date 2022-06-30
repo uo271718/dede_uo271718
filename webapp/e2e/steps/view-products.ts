@@ -1,7 +1,7 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
 import puppeteer from "puppeteer";
 
-const feature = loadFeature('./features/view-product.feature');
+const feature = loadFeature('./features/view-products.feature');
 
 let page: puppeteer.Page;
 let browser: puppeteer.Browser;
