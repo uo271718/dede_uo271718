@@ -37,7 +37,7 @@ defineFeature(feature, test => {
 
     then('The product details page should be shown', async () => {
       const text = await page.evaluate(() => document.body.textContent);
-      await expect(text).toContain('Sony')
+      await expect(text).toContain('Peso')
     });
   })
 
