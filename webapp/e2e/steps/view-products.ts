@@ -24,17 +24,20 @@ defineFeature(feature, test => {
   test('The user view the details of a product', ({given,when,then}) => {
 
     given('An user in the home page', async () => {
-      await expect(page).toContain('DeDe')
+      const text = await page.evaluate(() => document.body.textContent);
+      await expect(text).toContain('DeDe')
     });
 
     when('The user clicks on a product', async () => {
-      await expect(page).toContain('Playstation 5')
-      await expect(page).toContain('IPhone 13')
+      const text = await page.evaluate(() => document.body.textContent);
+      await expect(text).toContain('Playstation 5')
+      await expect(text).toContain('IPhone 13')
       await expect(page).toClick('a', { text: 'Playstation 5' })
     });
 
     then('The product details page should be shown', async () => {
-      await expect(page).toContain('Sony')
+      const text = await page.evaluate(() => document.body.textContent);
+      await expect(text).toContain('Sony')
     });
   })
 
