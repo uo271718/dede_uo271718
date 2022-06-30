@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from 'express';
 import { check } from 'express-validator';
-import { RequestListener } from 'http';
 const api: Router = express.Router()
 
 interface User {
