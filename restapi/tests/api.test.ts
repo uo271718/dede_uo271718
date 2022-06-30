@@ -4,10 +4,11 @@ import * as http from 'http';
 import bp from 'body-parser';
 import cors from 'cors';
 import api from '../api';
-import mongoose from 'mongoose';
 
 let app:Application;
 let server:http.Server;
+
+const mongoose = require("mongoose");
 
 beforeAll(async () => {
     app = express();
@@ -16,8 +17,10 @@ beforeAll(async () => {
         origin: ['http://localhost:3000']
     };
     app.use(cors(options));
-    app.use(bp.json());
+    app.use(bp.json()); 
     app.use("/api", api)
+
+    mongoose.connect('mongodb://admin:asw@ac-ndy3exa-shard-00-00.jzhk3ah.mongodb.net:27017,ac-ndy3exa-shard-00-01.jzhk3ah.mongodb.net:27017,ac-ndy3exa-shard-00-02.jzhk3ah.mongodb.net:27017/?ssl=true&replicaSet=atlas-mab3rk-shard-0&authSource=admin&retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true }, async () => { console.log('conectado') }); 
 
     server = app.listen(port, ():void => {
         console.log('Restapi server for testing listening on '+ port);
@@ -28,7 +31,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
     server.close() //close the server
-    mongoose.connection.close();
+    mongoose.connection.close()
 })
 
 describe('product ', () => {
@@ -36,7 +39,7 @@ describe('product ', () => {
      * Test that we can list products without any error.
      */
     it('can be listed',async () => {
-        const response:Response = await request(app).get("/productos");
+        const response:Response = await request(app).get("/api/productos");
         expect(response.statusCode).toBe(200);
     });
 
@@ -44,7 +47,7 @@ describe('product ', () => {
      * Test that we can find a product without any error.
      */
      it('can be found',async () => {
-        const response:Response = await request(app).get("/productos/1");
+        const response:Response = await request(app).get("/api/productos/1");
         expect(response.statusCode).toBe(200);
     });
 

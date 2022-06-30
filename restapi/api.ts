@@ -7,8 +7,6 @@ interface User {
   email: string;
 }
 
-const CryptoJS = require("crypto-js");
-
 const mongoose = require("mongoose");
 
 const productoSchema = new mongoose.Schema({
