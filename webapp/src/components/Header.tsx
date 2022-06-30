@@ -4,8 +4,6 @@ import { getDefaultSession } from "@inrupt/solid-client-authn-browser";
 
 function Header(props : any): JSX.Element {
 
-    let nombre: string;
-    nombre = "UO271718";
     return (
       <header>
         <h1><img src={logo} className="App-logo" alt="logo" width="60px" />DeDe</h1>

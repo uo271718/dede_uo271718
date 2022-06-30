@@ -16,7 +16,7 @@ function DetalleProducto(): JSX.Element {
 
   useEffect(() => {
     getProduct(id!);
-  }, []);
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
 
   return (

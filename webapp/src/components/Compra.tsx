@@ -11,8 +11,6 @@ function Compra(props: any): JSX.Element {
     document.location.href = "/login";
   }
 
-  const { id } = useParams<string>();
-
   const [producto, setProducto] = useState<Producto>({} as any);
   const [almacenes, setAlmacenes] = useState<Almacen[]>([]);
   const [almacen, setAlmacen] = useState("");
@@ -63,9 +61,9 @@ function Compra(props: any): JSX.Element {
   }
 
   useEffect(() => {
+    const { id } = useParams<string>();
     inicializarAlmacenes(id!);
     getProduct(id!);
-    setCoste(producto.precio);
   }, []);
 
 
